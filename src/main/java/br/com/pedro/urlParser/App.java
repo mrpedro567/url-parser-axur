@@ -1,28 +1,29 @@
 package br.com.pedro.urlParser;
 
 import java.net.*;
+import java.text.Normalizer;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 import java.util.logging.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
-public class App 
-{
-    public static void main( String[] args ) throws Exception
-    {
-    	String content = getHttpContent(args[0]);
+public class App {
+	
+	public static void main(String args[]) throws Exception{
+		String content = getHttpContent(args[0]);
     	String result = inspectHttpContent(content);
     	
     	System.out.println(result);
-    }
+	}
 
     /**
-     * Busca o conteudo da Url e retorna uma string com o Conteúdo HTML da url via BufferedReader 
+     * Busca o conteudo da Url e retorna uma string normalizada com o Conteúdo HTML da url via BufferedReader 
      * @param urlString url a buscar o conteúdo. 
-     * @return String do Conteudo html vindo da url em caso de sucesso
+     * @return String normalizada do Conteudo html vindo da url em caso de sucesso
      * @throws Exception
      */
     public static String getHttpContent(String urlString) throws Exception{
@@ -43,6 +44,7 @@ public class App
                 while ((line = bufferedReader.readLine()) != null){  
                   httpContent.append(line + "\n");  
                 }  
+                
                 bufferedReader.close();  
                 
             } catch (Exception e) {
@@ -52,14 +54,17 @@ public class App
             }
         }
         
-        return httpContent.toString();
+        /**
+         * Retorna o conteudo Http normalizdo e sem acentos e cedilha. 
+         */
+        return Normalizer.normalize(httpContent.toString(), Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "");
     }
     
     /**
      * Busca por uma lista de Keywords em uma string usando Regex. 
      * @param httpContent String do conteudo do site 
      * @return "suspicious" no caso de encontrar alguma das palavras ou "safe" caso não seja encontrado. 
-     * @throws Exception 
+     * @throws Exception Java IO Exception
      */
     public static String inspectHttpContent(String httpContent) throws Exception{
     	StringBuilder httpSafety = new StringBuilder();
