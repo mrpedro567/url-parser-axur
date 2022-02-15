@@ -1,5 +1,6 @@
 package br.com.pedro.urlParser;
 
+
 import java.net.*;
 import java.text.Normalizer;
 import java.io.*;
@@ -11,7 +12,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
-public class App {
+public class AxurChallenge {
 	
 	public static void main(String args[]) throws Exception{
 		String content = getHttpContent(args[0]);
@@ -35,7 +36,7 @@ public class App {
                 
                 URLConnection urlConnection = url.openConnection();
                 
-                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream(), "UTF-8"));
                 
                 /**
                  * Le o transfere o conteudo da Url para o htmlContent via bufferedReader
@@ -48,7 +49,7 @@ public class App {
                 bufferedReader.close();  
                 
             } catch (Exception e) {
-                Logger.getLogger(App.class.getName()).log(Level.SEVERE, null, e);
+                Logger.getLogger(AxurChallenge.class.getName()).log(Level.SEVERE, null, e);
                 
                 throw e;
             }
@@ -104,7 +105,7 @@ public class App {
         	return httpSafety.toString();
     	}
     	catch(Exception e) {
-    		Logger.getLogger(App.class.getName()).log(Level.SEVERE, null, e);
+    		Logger.getLogger(AxurChallenge.class.getName()).log(Level.SEVERE, null, e);
     	}
     	
     	return httpSafety.toString();
